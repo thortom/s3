@@ -18,6 +18,7 @@ import java.util.Collections;
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.introcs.In;
 import edu.princeton.cs.introcs.Out;
+import edu.princeton.cs.introcs.StdDraw;
 import edu.princeton.cs.algs4.SET;
 
 public class PointSET {
@@ -57,6 +58,14 @@ public class PointSET {
     // draw all of the points to standard draw
     public void draw() 
     {
+    	StdDraw.setPenColor(StdDraw.BLACK);
+    	StdDraw.setPenRadius(.01);
+    	
+    	for(Point2D t : points)
+    	{
+    		StdDraw.point(t.x(), t.y());
+    	}
+    	
     	return;
     }
 
@@ -154,6 +163,7 @@ public class PointSET {
         }
 
         out.println();
+        set.draw();
     }
 
 }
