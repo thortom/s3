@@ -11,49 +11,95 @@ package s3;
  *
  *************************************************************************/
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.introcs.In;
 import edu.princeton.cs.introcs.Out;
+import edu.princeton.cs.algs4.SET;
 
 public class PointSET {
     // construct an empty set of points
-    public PointSET() {
-
+	
+	SET<Point2D> points;
+	    
+	public PointSET() 
+    {
+    	points = new SET<Point2D>();
     }
 
     // is the set empty?
-    public boolean isEmpty() {
-        return false;
+    public boolean isEmpty() 
+    {
+        return points.isEmpty();
     }
 
     // number of points in the set
-    public int size() {
-        return 0;
+    public int size() 
+    {
+        return points.size();
     }
 
     // add the point p to the set (if it is not already in the set)
-    public void insert(Point2D p) {
+    public void insert(Point2D p) 
+    {
+    	points.add(p);
     }
 
     // does the set contain the point p?
-    public boolean contains(Point2D p) {
-        return false;
+    public boolean contains(Point2D p) 
+    {
+    	return points.contains(p);
     }
 
     // draw all of the points to standard draw
-    public void draw() {
+    public void draw() 
+    {
+    	return;
     }
 
     // all points in the set that are inside the rectangle
-    public Iterable<Point2D> range(RectHV rect) {
-        return null;
+    public Iterable<Point2D> range(RectHV rect) 
+    {
+    	if(points.isEmpty())
+    	{
+    		return null;
+    	}
+    	ArrayList<Point2D> lis = new ArrayList<Point2D>();
+    	for(Point2D t : points)
+    	{
+    		if(rect.contains(t))
+    		{
+    			lis.add(t);
+    		}
+    	}
+        return Collections.unmodifiableList(lis);
     }
 
     // a nearest neighbor in the set to p; null if set is empty
-    public Point2D nearest(Point2D p) {
-        return p;
+    public Point2D nearest(Point2D p) 
+    {
+    	if(points.isEmpty())
+    	{
+    		return null;
+    	}
+    	
+    	Point2D p2 = null;
+    	double min2 = 2.0;
+    	
+    	for(Point2D t : points)
+    	{
+    		double min1 = t.distanceSquaredTo(p);
+    		    		
+    		if(min1 < min2)
+        	{
+        		min2 = min1;
+        		p2 = t;
+        	}
+    	}
+    	return p2;    	
     }
 
     public static void main(String[] args) {
