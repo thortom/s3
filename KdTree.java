@@ -80,6 +80,10 @@ public class KdTree {
     		//StdOut.println("extra point " + p + " parent " + parent.p);
     		return null; //StdOut.println("extra point " + p);				// TODO: fix extra points
     	}
+    	if(p.equals(child.p))
+    	{
+    		return child;
+    	}
     	if(line == Line.VERTICAL) {
     		if		(p.x() < child.p.x()) child.left = insert(p, child.left, child, Line.HORIZONTAL); 		// TODO: Find nicer way for comparing the points
     		else if	(p.x() >= child.p.x()) {
@@ -220,7 +224,177 @@ public class KdTree {
 
     // a nearest neighbor in the set to p; null if set is empty
     public Point2D nearest(Point2D p) {
-        return p;
+    	if(root == null)
+    	{
+    		return null;
+    	}
+    	else
+    	{
+    		return nearest(root, root, Line.VERTICAL, p);
+    	}
+    }
+    
+    private Point2D nearest(Node child, Node parent, Line line, Point2D p)
+    {
+    	
+    	if(parent == null)
+    	{
+    		return null;
+    	}
+    	
+    	Point2D best = parent.p;
+   
+    	if(child == null) 
+    	{
+    		return best;
+    	}
+    	
+    	
+    	if(line == Line.VERTICAL)
+    	{
+    		if(p.x() < child.p.x())
+    		{
+    			if(child.left != null)
+    			{
+    				child.left.p = nearest(child.left, child, Line.HORIZONTAL, p);
+        			
+        			if(child.left.p.distanceSquaredTo(p) < child.p.distanceSquaredTo(p))
+        			{
+        				best = child.left.p;
+        			}
+        			else
+        			{
+        				best = child.p;
+        			}
+        			if(best.distanceSquaredTo(p) > (parent.p.x() - p.x()))
+        			{
+        				if(child.right != null)
+        				{
+        					child.right.p = nearest(child.right, child, Line.HORIZONTAL, p);
+            				
+            				if(child.right.p.distanceSquaredTo(p) < child.p.distanceSquaredTo(p))
+                			{
+                				best = child.right.p;
+                			}
+        				}
+        			}
+    			}
+    			else
+    			{
+    				best = child.p;
+    			}
+    			
+    			return best;
+    		}
+    		else
+    		{
+    			if(child.right != null)
+    			{
+    				child.right.p = nearest(child.right, child, Line.HORIZONTAL, p);
+        			
+        			if(child.right.p.distanceSquaredTo(p) < child.p.distanceSquaredTo(p))
+        			{
+        				best = child.right.p;
+        			}
+        			else
+        			{
+        				best = child.p;
+        			}
+        			if(best.distanceSquaredTo(p) > (parent.p.x() - p.x()))
+        			{
+        				if(child.left != null)
+        				{
+        					child.left.p = nearest(child.left, child, Line.HORIZONTAL, p);
+            				
+            				if(child.left.p.distanceSquaredTo(p) < child.p.distanceSquaredTo(p))
+            				{
+            					best = child.left.p;
+            				}
+        				}
+        			}
+    			}
+    			else
+    			{
+    				best = child.p;
+    			}
+    			
+    			return best;
+    		}
+    	}
+    	//if(line == Line.HORIZONTAL)
+    	else
+    	{
+    		if(p.y() < child.p.y())
+    		{
+    			if(child.left != null)
+    			{
+    				child.left.p = nearest(child.left, child, Line.VERTICAL, p);
+        			
+        			if(child.left.p.distanceSquaredTo(p) < child.p.distanceSquaredTo(p))
+        			{
+        				best = child.left.p;
+        			}
+        			else
+        			{
+        				best = child.p;
+        			}
+        			if(best.distanceSquaredTo(p) > (parent.p.x()-p.x()))
+        			{
+        				if(child.right != null)
+        				{
+        					child.right.p = nearest(child.right, child, Line.VERTICAL, p);
+            				
+            				if(child.right.p.distanceSquaredTo(p) < child.p.distanceSquaredTo(p))
+                			{
+                				best = child.right.p;
+                			}
+        				}
+        			}
+    			}
+    			else
+    			{
+    				best = child.p;
+    			}
+    			
+    			return best;
+    		}
+    		else
+    		{
+    			if(child.right != null)
+    			{
+    				child.right.p = nearest(child.right, child, Line.VERTICAL, p);
+        			
+        			if(child.right.p.distanceSquaredTo(p) < child.p.distanceSquaredTo(p))
+        			{
+        				best = child.right.p;
+        			}
+        			else
+        			{
+        				best = child.p;
+        			}
+        			if(best.distanceSquaredTo(p) > (parent.p.x() - p.x()))
+        			{
+        				if(child.left != null)
+        				{
+        					child.left.p = nearest(child.left, child, Line.VERTICAL, p);
+            				
+            				if(child.left.p.distanceSquaredTo(p) < child.p.distanceSquaredTo(p))
+            				{
+            					best = child.left.p;
+            				}
+        				}
+        			}
+    			}
+    			else
+    			{
+    				best = child.p;
+    			}
+    			
+    			return best;
+    		}
+    	}
+    	  	
+    	//return p;
     }
 
     /*******************************************************************************
