@@ -8,6 +8,7 @@ import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.SET;
 import edu.princeton.cs.introcs.In;
 import edu.princeton.cs.introcs.Out;
+import edu.princeton.cs.introcs.StdDraw;
 import edu.princeton.cs.introcs.StdOut;
 import edu.princeton.cs.introcs.StdIn;
 import edu.princeton.cs.introcs.StdRandom;
@@ -109,7 +110,40 @@ public class KdTree {
 
     // draw all of the points to standard draw
     public void draw() {
-
+    	StdDraw.setXscale(0, 1);
+		StdDraw.setYscale(0, 1);
+		StdDraw.line(0, 0, 0, 1);
+		StdDraw.line(0, 0, 1, 0);
+		StdDraw.line(1, 0, 1, 1);
+		StdDraw.line(0, 1, 1, 1);
+		drawPoints(root, Line.VERTICAL);
+    }
+    
+    private void drawPoints(Node child, Line line) {
+    	if(child == null) return;
+    	if(line == Line.VERTICAL) {
+    		StdDraw.setPenColor(StdDraw.RED);
+    		StdDraw.setPenRadius();
+    		StdDraw.line(child.p.x(), child.rect.ymin(), child.p.x(), child.rect.ymax());
+    		StdDraw.setPenColor(StdDraw.BLACK);
+    		 StdDraw.setPenRadius(.01);
+    		StdDraw.point(child.p.x(), child.p.y());
+    		drawPoints(child.left, Line.HORIZONTAL);
+    		drawPoints(child.right, Line.HORIZONTAL);
+    		return;
+    	}
+    	if(line == Line.HORIZONTAL) {
+    		StdDraw.setPenColor(StdDraw.BLUE);
+    		StdDraw.setPenRadius();
+    		StdDraw.line(child.rect.xmin(), child.p.y(), child.rect.xmax(), child.p.y());
+    		StdDraw.setPenColor(StdDraw.BLACK);
+    		StdDraw.setPenRadius(.01);
+    		StdDraw.point(child.p.x(), child.p.y());
+    		drawPoints(child.left, Line.VERTICAL);
+    		drawPoints(child.right, Line.VERTICAL);
+    		return;
+    	}
+    	
     }
 
     // all points in the set that are inside the rectangle
@@ -144,6 +178,8 @@ public class KdTree {
     	for(int i = 0; i < N; i++) {
     		StdOut.println("Contains point " + "p = " + points[i] + ", " + kdt.contains(points[i]));
     	}
+    	
+    	kdt.draw();
     	/*
         In in = new In();
         Out out = new Out();
