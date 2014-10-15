@@ -23,7 +23,7 @@ public class KdTree {
         private Point2D p;
 
         public Node(Point2D p, double xMin, double yMin, double xMax, double yMax) {
-        	StdOut.println("new Node");
+        	//StdOut.println("new Node");
             this.p = p;
             rect = new RectHV(xMin, yMin, xMax, yMax);
             this.left = null;
@@ -58,31 +58,69 @@ public class KdTree {
     	root = insert(p, root, null, Line.VERTICAL); 																	// TODO: send inn null for parent.
     };
     
-    private Node insert(Point2D p, Node child, Node parent, Line line) {
-    	if(child == null) {
-    		if(child == parent)	return new Node(p, 0, 0, 1, 1); 				// This is the root
-    		if(p == parent.p) return null;										// Avoid adding duplicated points
-    		if(line == Line.HORIZONTAL) { 										// The parents line is VERTICAL here 					// Move this to if and else if in main here below
-        		if		(p.x() < parent.p.x()) return new Node(p, parent.rect.xmin(), parent.rect.ymin(), parent.p.x(), parent.rect.ymax());
-        		else if	(p.x() > parent.p.x()) return new Node(p, parent.p.x(), parent.rect.ymin(), parent.rect.xmax(), parent.rect.ymax());
-        		else StdOut.println("Should not be here1"); 																// <- this is not needed
+    private Node insert(Point2D p, Node child, Node parent, Line line) 
+    {
+    	
+    	if(child == null) 
+    	{
+    		//if(child == parent)	return new Node(p, 0, 0, 1, 1);					// This is the root
+    		if(parent == null)	return child = new Node(p, 0, 0, 1, 1);
+    		//if(p == parent.p) return parent;										// Avoid adding duplicated points
+    		if(line == Line.VERTICAL) { 										// The parents line is VERTICAL here 					// Move this to if and else if in main here below
+        		if(p.x() < parent.p.x())
+        		{
+        			return child = new Node(p, parent.rect.xmin(), parent.rect.ymin(), parent.p.x(), parent.rect.ymax());
+        		}
+        		//else if(p.x() > parent.p.x()) 
+        		else
+        		{
+        			return child = new Node(p, parent.p.x(), parent.rect.ymin(), parent.rect.xmax(), parent.rect.ymax());
+        		}
+        		//else ;//StdOut.println("Should not be here1"); 																// <- this is not needed
         	}
-    		else if(line == Line.VERTICAL) { 									// The parents line is HORIZONTAL here
-        		if		(p.y() < parent.p.y()) return new Node(p, parent.rect.xmin(), parent.rect.ymin(), parent.rect.xmax(), parent.p.y());
-        		else if	(p.y() > parent.p.y()) return new Node(p, parent.rect.xmin(), parent.p.y(), parent.rect.xmax(), parent.rect.ymax());
-        		else StdOut.println("Sholud not be here2"); 																// <- this is not needed
+    		//else if(line == Line.HORIZONTAL) { 									// The parents line is HORIZONTAL here
+    		else{
+    			if(p.y() < parent.p.y()) 
+        		{
+        			return child = new Node(p, parent.rect.xmin(), parent.rect.ymin(), parent.rect.xmax(), parent.p.y());
+        		}
+        		//else if(p.y() > parent.p.y())
+        		else
+        		{
+        			return child = new Node(p, parent.rect.xmin(), parent.p.y(), parent.rect.xmax(), parent.rect.ymax());
+        		}
+        		//else ;//StdOut.println("Sholud not be here2"); 																// <- this is not needed
         	}
     		
     	}
-    	if(line == Line.VERTICAL) {
-    		if		(p.x() < child.p.x()) child.left = insert(p, child.left, child, Line.HORIZONTAL); 		// TODO: Find nicer way for comparing the points
-    		else if	(p.x() >= child.p.x()) child.right = insert(p, child.right, child, Line.HORIZONTAL);
-    		else StdOut.println("Should not be here3"); 																	// <- this is not needed
+    	if(p.equals(child.p))
+    	{
+    		return child;
     	}
-    	else if(line == Line.HORIZONTAL) {
-    		if		(p.y() < child.p.y()) child.left = insert(p, child.left, child, Line.VERTICAL);
-    		else if	(p.y() >= child.p.y()) child.right = insert(p, child.right, child, Line.VERTICAL);
-    		else StdOut.println("Should not be here4");																		// <- this is not needed
+    	if(line == Line.VERTICAL) {
+    		if(p.x() < child.p.x()) 
+    		{
+    			child.left = insert(p, child.left, child, Line.HORIZONTAL); 		// TODO: Find nicer way for comparing the points
+    		}
+    		//else if(p.x() >= child.p.x()) 
+    		else
+    		{
+    			child.right = insert(p, child.right, child, Line.HORIZONTAL);
+    		}
+    		//else ;//StdOut.println("Should not be here3"); 																	// <- this is not needed
+    	}
+    	//else if(line == Line.HORIZONTAL) {
+    	else{		
+    		if(p.y() < child.p.y()) 
+    		{
+    			child.left = insert(p, child.left, child, Line.VERTICAL);
+    		}
+    		//else if(p.y() >= child.p.y()) 
+    		else
+    		{
+    			child.right = insert(p, child.right, child, Line.VERTICAL);
+       		}
+    		//else ;//StdOut.println("Should not be here4");																		// <- this is not needed
     	}
     	return child;
     }
@@ -105,7 +143,7 @@ public class KdTree {
     		else if	(p.y() > x.p.y()) return contains(x.right, Line.VERTICAL, p);
     		else return true;
     	}
-    	StdOut.println("Error in contains, should not be here");
+    	//StdOut.println("Error in contains, should not be here");
     	return false;
     }
 
@@ -176,7 +214,6 @@ public class KdTree {
    
     	if(child == null) 
     	{
-    		best = parent.p;
     		return best;
     	}
     	
