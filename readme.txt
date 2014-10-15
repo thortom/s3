@@ -3,12 +3,12 @@
  *  Kd-tree
 **********************************************************************/
 
-Name:    
-Login:   
+Name:	Halldór Stefánsson
+Login:	halldors12
 Section instructor:
 
-Partner name:     
-Partner login:    
+Partner name:	Þór Tómasarson
+Partner login:	thortom12
 Partner section instructor:
 
 /**********************************************************************
@@ -22,7 +22,7 @@ Partner section instructor:
 
 
 /**********************************************************************
- *  Describe your method for nearest neighbor search in a kd-tree.
+ *  Describe your method for nearest neighbour search in a kd-tree.
  **********************************************************************/
 
 
@@ -55,7 +55,7 @@ bytes per KdTree of N points (using tilde notation):   ~
 
 
 /**********************************************************************
- *  How many nearest neighbor calculations can your brute-force
+ *  How many nearest neighbour calculations can your brute-force
  *  implementation perform per second for input100K.txt (100,000 points)
  *  and input1M.txt (1 million points), where the query points are
  *  random points in the unit square? Explain how you determined the
