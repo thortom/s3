@@ -2,10 +2,13 @@ package s3;
 /*************************************************************************
  *************************************************************************/
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.SET;
+import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.introcs.In;
 import edu.princeton.cs.introcs.Out;
 import edu.princeton.cs.introcs.StdDraw;
@@ -23,7 +26,6 @@ public class KdTree {
         private Point2D p;
 
         public Node(Point2D p, double xMin, double yMin, double xMax, double yMax) {
-        	StdOut.println("new Node");
             this.p = p;
             rect = new RectHV(xMin, yMin, xMax, yMax);
             this.left = null;
@@ -55,34 +57,48 @@ public class KdTree {
 
     // add the point p to the set (if it is not already in the set)
     public void insert(Point2D p) {
-    	root = insert(p, root, null, Line.VERTICAL); 																	// TODO: send inn null for parent.
+    	root = insert(p, root, null, Line.VERTICAL); 																	// null is used for no parent
     };
     
     private Node insert(Point2D p, Node child, Node parent, Line line) {
     	if(child == null) {
     		if(child == parent)	return new Node(p, 0, 0, 1, 1); 				// This is the root
-    		if(p == parent.p) return null;										// Avoid adding duplicated points
+    		/*
+    		if(p.compareTo(parent.p) == 0) { //p == parent.p) {
+    			StdOut.println("extra point " + p);
+    			return null;										// Avoid adding duplicated points
+    		}
+    		*/
     		if(line == Line.HORIZONTAL) { 										// The parents line is VERTICAL here 					// Move this to if and else if in main here below
         		if		(p.x() < parent.p.x()) return new Node(p, parent.rect.xmin(), parent.rect.ymin(), parent.p.x(), parent.rect.ymax());
-        		else if	(p.x() > parent.p.x()) return new Node(p, parent.p.x(), parent.rect.ymin(), parent.rect.xmax(), parent.rect.ymax());
-        		else StdOut.println("Should not be here1"); 																// <- this is not needed
+        		else if	(p.x() >= parent.p.x()) return new Node(p, parent.p.x(), parent.rect.ymin(), parent.rect.xmax(), parent.rect.ymax());
         	}
     		else if(line == Line.VERTICAL) { 									// The parents line is HORIZONTAL here
         		if		(p.y() < parent.p.y()) return new Node(p, parent.rect.xmin(), parent.rect.ymin(), parent.rect.xmax(), parent.p.y());
-        		else if	(p.y() > parent.p.y()) return new Node(p, parent.rect.xmin(), parent.p.y(), parent.rect.xmax(), parent.rect.ymax());
-        		else StdOut.println("Sholud not be here2"); 																// <- this is not needed
+        		else if	(p.y() >= parent.p.y()) return new Node(p, parent.rect.xmin(), parent.p.y(), parent.rect.xmax(), parent.rect.ymax());
         	}
-    		
+    		//StdOut.println("extra point " + p + " parent " + parent.p);
+    		return null; //StdOut.println("extra point " + p);				// TODO: fix extra points
     	}
     	if(line == Line.VERTICAL) {
     		if		(p.x() < child.p.x()) child.left = insert(p, child.left, child, Line.HORIZONTAL); 		// TODO: Find nicer way for comparing the points
-    		else if	(p.x() >= child.p.x()) child.right = insert(p, child.right, child, Line.HORIZONTAL);
-    		else StdOut.println("Should not be here3"); 																	// <- this is not needed
+    		else if	(p.x() >= child.p.x()) {
+    			if (p.compareTo(child.p) == 0) {
+    				//StdOut.println("extra1 " + p.x() + " " + p.y());
+    				return child; //StdOut.println("extra1");
+    			}
+    			child.right = insert(p, child.right, child, Line.HORIZONTAL);
+    		}
     	}
-    	else if(line == Line.HORIZONTAL) {
+    	else if(line == Line.HORIZONTAL) {// Hello
     		if		(p.y() < child.p.y()) child.left = insert(p, child.left, child, Line.VERTICAL);
-    		else if	(p.y() >= child.p.y()) child.right = insert(p, child.right, child, Line.VERTICAL);
-    		else StdOut.println("Should not be here4");																		// <- this is not needed
+    		else if	(p.y() >= child.p.y()) {
+    			if (p.compareTo(child.p) == 0) {
+    				//StdOut.println("extra2 " + p.x() + " " + p.y());
+    				return child; //StdOut.println("extra2");
+    			}
+    			child.right = insert(p, child.right, child, Line.VERTICAL);
+    		}
     	}
     	return child;
     }
@@ -98,14 +114,21 @@ public class KdTree {
     	if(line == Line.VERTICAL) {
     		if		(p.x() < x.p.x()) return contains(x.left, Line.HORIZONTAL, p); 		// TODO: Find nicer way for comparing the points
     		else if	(p.x() > x.p.x()) return contains(x.right, Line.HORIZONTAL, p);
-    		else return true;
+    		else {
+    			if (p.compareTo(x.p) == 0) //StdOut.println("Verticla");
+    				return true;
+    			return false;
+    		}
     	}
     	else if(line == Line.HORIZONTAL) {
     		if		(p.y() < x.p.y()) return contains(x.left, Line.VERTICAL, p);
     		else if	(p.y() > x.p.y()) return contains(x.right, Line.VERTICAL, p);
-    		else return true;
+    		else {
+    			if (p.compareTo(x.p) == 0) //StdOut.println("Horizontal");
+    				return true;
+    			return false;
+    		}
     	}
-    	StdOut.println("Error in contains, should not be here");
     	return false;
     }
 
@@ -126,9 +149,19 @@ public class KdTree {
     		StdDraw.setPenColor(StdDraw.RED);
     		StdDraw.setPenRadius();
     		StdDraw.line(child.p.x(), child.rect.ymin(), child.p.x(), child.rect.ymax());
-    		StdDraw.setPenColor(StdDraw.BLACK);
-    		 StdDraw.setPenRadius(.01);
-    		StdDraw.point(child.p.x(), child.p.y());
+    		
+    		// debug TODO: delete
+    		if((child.p.x() ==  0.885 && child.p.y() == 0.291) || (child.p.x() ==  0.314 && child.p.y() == 0.944)) {
+    			StdDraw.setPenColor(StdDraw.PINK);
+        		StdDraw.setPenRadius(.05);
+        		StdDraw.point(child.p.x(), child.p.y());
+    		}
+    		else {
+    			StdDraw.setPenColor(StdDraw.BLACK);
+        		StdDraw.setPenRadius(.01);
+        		StdDraw.point(child.p.x(), child.p.y());
+    		}
+    		
     		drawPoints(child.left, Line.HORIZONTAL);
     		drawPoints(child.right, Line.HORIZONTAL);
     		return;
@@ -137,9 +170,19 @@ public class KdTree {
     		StdDraw.setPenColor(StdDraw.BLUE);
     		StdDraw.setPenRadius();
     		StdDraw.line(child.rect.xmin(), child.p.y(), child.rect.xmax(), child.p.y());
-    		StdDraw.setPenColor(StdDraw.BLACK);
-    		StdDraw.setPenRadius(.01);
-    		StdDraw.point(child.p.x(), child.p.y());
+
+    		// debug TODO: delete
+    		if((child.p.x() ==  0.885 && child.p.y() == 0.291) || (child.p.x() ==  0.314 && child.p.y() == 0.944)) {
+    			StdDraw.setPenColor(StdDraw.PINK);
+        		StdDraw.setPenRadius(.05);
+        		StdDraw.point(child.p.x(), child.p.y());
+    		}
+    		else {
+    			StdDraw.setPenColor(StdDraw.BLACK);
+        		StdDraw.setPenRadius(.01);
+        		StdDraw.point(child.p.x(), child.p.y());
+    		}
+    		
     		drawPoints(child.left, Line.VERTICAL);
     		drawPoints(child.right, Line.VERTICAL);
     		return;
@@ -149,7 +192,30 @@ public class KdTree {
 
     // all points in the set that are inside the rectangle
     public Iterable<Point2D> range(RectHV rect) {
-        return null;
+    	ArrayList<Point2D> lis = new ArrayList<Point2D>();
+    	Stack<Node> stack = new Stack<Node>();
+    	Node current = root;
+    	boolean done = false;
+    	 
+    	while (!done) {
+    	    if(current !=  null && current.rect.intersects(rect)) {
+	    	    stack.push(current);                                               
+	    	    current = current.left;  
+    	    }
+    	    else {
+    	    	if (!stack.isEmpty()) {
+    	    		current = stack.pop();
+    	    		if(rect.contains(current.p))
+    	    			lis.add(current.p);
+
+    	    		current = current.right;
+    	    	}
+    	    	else
+    	    		done = true; 
+    	    }
+    	}
+    	
+        return Collections.unmodifiableList(lis);
     }
 
     // a nearest neighbor in the set to p; null if set is empty
@@ -161,6 +227,7 @@ public class KdTree {
      * Test client
      ******************************************************************************/
     public static void main(String[] args) {
+    	/*
     	int N = StdIn.readInt();
     	KdTree kdt = new KdTree();
     	
@@ -184,66 +251,40 @@ public class KdTree {
     	
     	for(int i = 0; i < N; i++) {
     		kdt.insert(points[i]);
-    		
-    		StdOut.println("inserting " + points[i].x() + " " + points[i].y());
-    	}
-    	for(int i = 0; i < N; i++) {
-    		StdOut.println("Contains point " + "p = " + points[i] + ", " + kdt.contains(points[i]));
     	}
     	
-    	kdt.draw();
-    	/*
-        In in = new In();
+    	//kdt.draw();
+    	
+    	StdOut.println("KdTree");
+    	kdt.range(new RectHV(.5, .5, .9, .7));
+    	
+    	for(int i = 0; i < N; i++) {
+    		StdOut.println("contains " + points[i] + ": " + kdt.contains(points[i]));
+    	}
+    	*/
+    	
+    	In in = new In();
         Out out = new Out();
-        int nrOfRecangles = in.readInt();
-        int nrOfPointsCont = in.readInt();
-        int nrOfPointsNear = in.readInt();
-        RectHV[] rectangles = new RectHV[nrOfRecangles];
-        Point2D[] pointsCont = new Point2D[nrOfPointsCont];
-        Point2D[] pointsNear = new Point2D[nrOfPointsNear];
-        for (int i = 0; i < nrOfRecangles; i++) {
-            rectangles[i] = new RectHV(in.readDouble(), in.readDouble(),
-                    in.readDouble(), in.readDouble());
+        int N = in.readInt(), C = in.readInt(), T = 20;
+        KdTree tree = new KdTree();
+        Point2D [] points = new Point2D[C];
+        out.printf("Inserting %d points into tree\n", N);
+        for (int i = 0; i < N; i++) {
+            tree.insert(new Point2D(in.readDouble(), in.readDouble()));
         }
-        for (int i = 0; i < nrOfPointsCont; i++) {
-            pointsCont[i] = new Point2D(in.readDouble(), in.readDouble());
+        out.printf("tree.size(): %d\n", tree.size());
+        out.printf("Testing contains method, querying %d points\n", C);
+        for (int i = 0; i < C; i++) {
+            points[i] = new Point2D(in.readDouble(), in.readDouble());
+            out.printf("%s: %s\n", points[i], tree.contains(points[i]));
         }
-        for (int i = 0; i < nrOfPointsNear; i++) {
-            pointsNear[i] = new Point2D(in.readDouble(), in.readDouble());
-        }
-        KdTree set = new KdTree();
-        for (int i = 0; !in.isEmpty(); i++) {
-            double x = in.readDouble(), y = in.readDouble();
-            set.insert(new Point2D(x, y));
-        }
-        for (int i = 0; i < nrOfRecangles; i++) {
-            // Query on rectangle i, sort the result, and print
-            Iterable<Point2D> ptset = set.range(rectangles[i]);
-            int ptcount = 0;
-            for (Point2D p : ptset)
-                ptcount++;
-            Point2D[] ptarr = new Point2D[ptcount];
-            int j = 0;
-            for (Point2D p : ptset) {
-                ptarr[j] = p;
-                j++;
+        for (int i = 0; i < T; i++) {
+            for (int j = 0; j < C; j++) {
+                tree.contains(points[j]);
             }
-            Arrays.sort(ptarr);
-            out.println("Inside rectangle " + (i + 1) + ":");
-            for (j = 0; j < ptcount; j++)
-                out.println(ptarr[j]);
         }
-        out.println("Contain test:");
-        for (int i = 0; i < nrOfPointsCont; i++) {
-            out.println((i + 1) + ": " + set.contains(pointsCont[i]));
-        }
-
-        out.println("Nearest test:");
-        for (int i = 0; i < nrOfPointsNear; i++) {
-            out.println((i + 1) + ": " + set.nearest(pointsNear[i]));
-        }
-
-        out.println();
-        */
+        
+        tree.draw();
+        
     }
 }
