@@ -5,11 +5,11 @@
 
 Name:	Halldor Stefansson
 Login:	halldors12
-Section instructor:
+Section instructor: Kristinn Björgvin Árdal
 
 Partner name:	Thor Tomasarson
 Partner login:	thortom12
-Partner section instructor:
+Partner section instructor: Sigurður Rúnar Helgason
 
 /**********************************************************************
  *  Describe the Node data type you used to implement the
@@ -35,6 +35,16 @@ When the stack is empty then we are done, and return the Queue<Point2D> of point
 /**********************************************************************
  *  Describe your method for nearest neighbour search in a kd-tree.
  **********************************************************************/
+The nearest neighbor search method in our kd-tree uses recursive calls to
+recursiveNearest(..) the first call puts the nearest neighbor as the root.
+The recursive function checks if the current Node point is closer to
+the point of interest than the current-best. If so then update the 
+current-best. Then the function checks first for the nearest neighbor on
+the points side, point of interest, side of the splitting horizontal/vertical line.
+When it comes back from the search on the point side, the function checks
+if the other sides rectangle is close enough to the point of interest. To be
+able to contain a closer neighbor, then we check there also. This is
+done recursively.
 
 
 /**********************************************************************
@@ -47,13 +57,14 @@ When the stack is empty then we are done, and return the Queue<Point2D> of point
  *  including memory for the nodes, points, and rectangles.
  **********************************************************************/
 
-bytes per Point2D: 	32 bytes
+bytes per Point2D: 	32 bytes = 
+					(16 bytes overhead) + 2x(8 bytes for coordinates)
 
 bytes per RectHV:	48 bytes =
 					(16 bytes overhead) + 4x(8 bytes for coordinates)
 
 bytes per KdTree of N points (using tilde notation):   ~ 	112xN bytes 
-					// N for number of nodes in KdTree
+															// N for number of nodes in KdTree
 					/*
 					Node: (16 overhead) + (2x8 bytes Node reference)
 							+ (48 bytes RectHV) + (32 bytes Point2D)
@@ -138,7 +149,12 @@ No help received.
 /**********************************************************************
  *  Describe any serious problems you encountered.                    
  **********************************************************************/
-Difficulties implementing nearest neighbour in KdTree.
+Difficulties implementing nearest neighbour in KdTree. We started out 
+with a recursive attempt with nearest(). It kept giving us some errors
+and it grew out of bounds. When the recursive function nearest() had
+become 100 lines of code. We took a step back and restructured the
+hole function. See private Point2D nearest(Node child, Line line, Point2D p)
+for the old code.
 
 /**********************************************************************
  *  If you worked with a partner, assert below that you followed
@@ -155,3 +171,4 @@ Both contributed to readme.
  *  on how much you learned from doing the assignment, and whether    
  *  you enjoyed doing it.                                             
  **********************************************************************/
+ We learned a lot on how to debug well with eclipse, and enjoyed assignment also.
