@@ -183,7 +183,14 @@ public class KdTree {
     // a nearest neighbor in the set to p; null if set is empty
     public Point2D nearest(Point2D p) 
     {
-    	return nearest(root, Line.VERTICAL, p);
+    	if(root == null)
+    	{
+    		return null;
+    	}
+    	else
+    	{
+    		return nearest(root, Line.VERTICAL, p);
+    	}
     }
     
     private Point2D nearest(Node child, Line line, Point2D p)
@@ -193,7 +200,7 @@ public class KdTree {
     	{
     		return null;
     	}
-    	
+    		
     	if(p.equals(child.p))
     	{
     		return child.p;
