@@ -220,33 +220,36 @@ public class KdTree {
     
     private Point2D nearest(Node child, Node parent, Line line, Point2D p)
     {
-    	Point2D best = parent.p;
-   
+    	   
     	if(child == null) 
     	{
-    		return best = parent.p;
+    		return parent.p;
     	}
     	
     	if(p.equals(child.p))
     	{
-    		return best = child.p;
+    		return child.p;
     	}
+    	
+    	Point2D best = child.p;
+    	
     	if(line == Line.VERTICAL)
     	{
     		if(p.x() < child.p.x())
     		{
+    			
     			child.left.p = nearest(child.left, child, Line.HORIZONTAL, p);
         			
         		if(child.left.p.distanceSquaredTo(p) < child.p.distanceSquaredTo(p))
         		{
         			best = child.left.p;
         		}
-        		else
-        		{
-        			best = child.p;
-        		}
         		if(best.distanceSquaredTo(p) > (parent.p.x() - p.x()))
         		{
+        			if(p.compareTo(child.p) == 0)
+        			{
+        				return child.p;
+        			}
         			child.right.p = nearest(child.right, child, Line.HORIZONTAL, p);
             				
             		if(child.right.p.distanceSquaredTo(p) < child.p.distanceSquaredTo(p))
@@ -254,24 +257,19 @@ public class KdTree {
                 		best = child.right.p;
                 	}
        			}
-    			else
-    			{
-    				best = child.p;
-    			}
-    			
     			return best;
     		}
     		else
     		{
+    			if(p.compareTo(child.p) == 0)
+    			{
+    				return child.p;
+    			}
     			child.right.p = nearest(child.right, child, Line.HORIZONTAL, p);
         			
         		if(child.right.p.distanceSquaredTo(p) < child.p.distanceSquaredTo(p))
         		{
         			best = child.right.p;
-        		}
-        		else
-        		{
-        			best = child.p;
         		}
         		if(best.distanceSquaredTo(p) > (parent.p.x() - p.x()))
         		{
@@ -282,11 +280,6 @@ public class KdTree {
             			best = child.left.p;
             		}
     			}
-    			else
-    			{
-    				best = child.p;
-    			}
-    			
     			return best;
     		}
     	}
@@ -301,38 +294,33 @@ public class KdTree {
         		{
        				best = child.left.p;
        			}
-       			else
-       			{
-       				best = child.p;
-       			}
        			if(best.distanceSquaredTo(p) > (parent.p.x()-p.x()))
        			{
+       				if(p.compareTo(child.p) == 0)
+        			{
+        				return child.p;
+        			}
         			child.right.p = nearest(child.right, child, Line.VERTICAL, p);
             				
             		if(child.right.p.distanceSquaredTo(p) < child.p.distanceSquaredTo(p))
           			{
            				best = child.right.p;
            			}
-    			}
-    			else
-    			{
-    				best = child.p;
-    			}
-    			
+    			}   			
     			return best;
     		}
     		else
     		{
+    			if(p.compareTo(child.p) == 0)
+    			{
+    				return child.p;
+    			}
     			child.right.p = nearest(child.right, child, Line.VERTICAL, p);
         			
         		if(child.right.p.distanceSquaredTo(p) < child.p.distanceSquaredTo(p))
         		{
         			best = child.right.p;
         		}
-        		else
-        		{
-       				best = child.p;
-       			}
        			if(best.distanceSquaredTo(p) > (parent.p.x() - p.x()))
        			{
         			child.left.p = nearest(child.left, child, Line.VERTICAL, p);
@@ -342,16 +330,10 @@ public class KdTree {
       					best = child.left.p;
        				}
         		}
-    			else
-    			{
-    				best = child.p;
-    			}
-    			
     			return best;
     		}
     	}
-    	  	
-    	//return p;
+    	//return best;
     }
 
     /*******************************************************************************
