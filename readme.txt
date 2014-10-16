@@ -74,7 +74,25 @@ bytes per KdTree of N points (using tilde notation):   ~ 	112xN bytes
  *  points or to read them in from standard input.)
  **********************************************************************/
 
+ 				N 		Time 	 Ratio
+ 			   16000    0.015		-
+ 			   32000    0.035		2.33
+ 			   64000    0.072		2.05
+ 			   128000   0.191		2.65
+ 			   256000   0.503		2.63
+ 			   512000   1.316		2.72
+ 			   			Average:	2.48
+ 	Expexted running time of KdTree is:
+ 		T(N) = aN^b
+ 			were b = lg(avgRatio) = lg(2.48) = 1.31
+ 			and T(128000) = a(128000)^b => a = 2.65/(N^1.31) = 5.4*10^-7
 
+ 	Ans ->	T(N) = ~5.4*10^-7*N^1.31
+
+ 	In the code we have one for-loop that iterates through each point (N)
+ 	and inserts one at a time. An insert operation takes at the most time
+ 	proportional to the height of the tree (lgN). That gives T(N) = O(NlgN),
+ 	which is close to the derived solution T(N) = ~5.4*10^-7*N^1.31.
 
 /**********************************************************************
  *  How many nearest neighbour calculations can your brute-force
