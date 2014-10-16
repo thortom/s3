@@ -115,13 +115,19 @@ public class KdTree {
     private boolean contains(Node x, Line line, Point2D p) {
     	
     	if(x == null) return false;
+    	/*
+    	if((x.p.x() ==  0.885 || x.p.y() == 0.291) || (x.p.x() ==  0.314 && x.p.y() == 0.944)) {
+			StdOut.println("x.p = " + x.p + " Line = " + line);
+		}
+    	*/
     	if(line == Line.VERTICAL) {
     		if		(p.x() < x.p.x()) return contains(x.left, Line.HORIZONTAL, p); 		// TODO: Find nicer way for comparing the points
     		else if	(p.x() > x.p.x()) return contains(x.right, Line.HORIZONTAL, p);
     		else {
     			if (p.compareTo(x.p) == 0) //StdOut.println("Verticla");
     				return true;
-    			return false;
+    			else return contains(x.right, Line.HORIZONTAL, p);
+    				
     		}
     	}
     	else if(line == Line.HORIZONTAL) {
@@ -130,7 +136,7 @@ public class KdTree {
     		else {
     			if (p.compareTo(x.p) == 0) //StdOut.println("Horizontal");
     				return true;
-    			return false;
+    			else return contains(x.right, Line.VERTICAL, p);
     		}
     	}
     	return false;
@@ -154,17 +160,9 @@ public class KdTree {
     		StdDraw.setPenRadius();
     		StdDraw.line(child.p.x(), child.rect.ymin(), child.p.x(), child.rect.ymax());
     		
-    		// debug TODO: delete
-    		if((child.p.x() ==  0.885 && child.p.y() == 0.291) || (child.p.x() ==  0.314 && child.p.y() == 0.944)) {
-    			StdDraw.setPenColor(StdDraw.PINK);
-        		StdDraw.setPenRadius(.05);
-        		StdDraw.point(child.p.x(), child.p.y());
-    		}
-    		else {
-    			StdDraw.setPenColor(StdDraw.BLACK);
-        		StdDraw.setPenRadius(.01);
-        		StdDraw.point(child.p.x(), child.p.y());
-    		}
+    		StdDraw.setPenColor(StdDraw.BLACK);
+        	StdDraw.setPenRadius(.01);
+        	StdDraw.point(child.p.x(), child.p.y());
     		
     		drawPoints(child.left, Line.HORIZONTAL);
     		drawPoints(child.right, Line.HORIZONTAL);
@@ -174,18 +172,10 @@ public class KdTree {
     		StdDraw.setPenColor(StdDraw.BLUE);
     		StdDraw.setPenRadius();
     		StdDraw.line(child.rect.xmin(), child.p.y(), child.rect.xmax(), child.p.y());
-
-    		// debug TODO: delete
-    		if((child.p.x() ==  0.885 && child.p.y() == 0.291) || (child.p.x() ==  0.314 && child.p.y() == 0.944)) {
-    			StdDraw.setPenColor(StdDraw.PINK);
-        		StdDraw.setPenRadius(.05);
-        		StdDraw.point(child.p.x(), child.p.y());
-    		}
-    		else {
-    			StdDraw.setPenColor(StdDraw.BLACK);
-        		StdDraw.setPenRadius(.01);
-        		StdDraw.point(child.p.x(), child.p.y());
-    		}
+    		
+    		StdDraw.setPenColor(StdDraw.BLACK);
+        	StdDraw.setPenRadius(.01);
+        	StdDraw.point(child.p.x(), child.p.y());
     		
     		drawPoints(child.left, Line.VERTICAL);
     		drawPoints(child.right, Line.VERTICAL);
@@ -452,12 +442,13 @@ public class KdTree {
             points[i] = new Point2D(in.readDouble(), in.readDouble());
             out.printf("%s: %s\n", points[i], tree.contains(points[i]));
         }
+        /*
         for (int i = 0; i < T; i++) {
             for (int j = 0; j < C; j++) {
                 tree.contains(points[j]);
             }
         }
-        
+        */
         tree.draw();
         
     }
