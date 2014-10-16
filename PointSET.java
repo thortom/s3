@@ -11,9 +11,7 @@ package s3;
  *
  *************************************************************************/
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.Queue;

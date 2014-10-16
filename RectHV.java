@@ -2,6 +2,7 @@ package s3;
 
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.introcs.StdDraw;
+import edu.princeton.cs.introcs.StdOut;
 
 /*************************************************************************
  *  Compilation:  javac RectHV.java
@@ -89,5 +90,19 @@ public class RectHV {
     public String toString() {
         return "[" + xmin + ", " + xmax + "] x [" + ymin + ", " + ymax + "]";
     }
+    
+    public static void main(String[] args) {
+		RectHV A = new RectHV(0, 0, 1, 1);
+		RectHV r = new RectHV(.5, .5, .9, .8);
+		RectHV b = new RectHV(.2, .2, .3, .3);
+		
+		if(r.intersects(A))
+			StdOut.println("Hello");
+		if(b.intersects(A))
+			StdOut.println("yes");
+		else
+			StdOut.println("No");
+		
+	}
 
 }
