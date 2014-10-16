@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import edu.princeton.cs.algs4.Point2D;
+import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.introcs.In;
 import edu.princeton.cs.introcs.Out;
 import edu.princeton.cs.introcs.StdDraw;
@@ -76,15 +77,15 @@ public class PointSET {
     	{
     		return null;
     	}
-    	ArrayList<Point2D> lis = new ArrayList<Point2D>();
+    	Queue<Point2D> queue = new Queue<Point2D>();
     	for(Point2D t : points)
     	{
     		if(rect.contains(t))
     		{
-    			lis.add(t);
+    			queue.enqueue(t);
     		}
     	}
-        return Collections.unmodifiableList(lis);
+        return queue;
     }
 
     // a nearest neighbor in the set to p; null if set is empty
