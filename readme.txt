@@ -47,7 +47,8 @@ When the stack is empty then we are done, and return the Queue<Point2D> of point
  *  including memory for the nodes, points, and rectangles.
  **********************************************************************/
 
-bytes per Point2D: 	32 bytes
+bytes per Point2D: 	32 bytes = 
+					(16 bytes overhead) + 2x(8 bytes for coordinates)
 
 bytes per RectHV:	48 bytes =
 					(16 bytes overhead) + 4x(8 bytes for coordinates)
