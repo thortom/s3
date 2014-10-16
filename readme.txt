@@ -82,7 +82,7 @@ bytes per KdTree of N points (using tilde notation):   ~ 	112xN bytes
  			   256000   0.503		2.63
  			   512000   1.316		2.72
  			   			Average:	2.48
- 	Expexted running time of KdTree is:
+ 	Expected running time of KdTree is:
  		T(N) = aN^b
  			were b = lg(avgRatio) = lg(2.48) = 1.31
  			and T(128000) = a(128000)^b => a = 2.65/(N^1.31) = 5.4*10^-7
@@ -123,12 +123,12 @@ input1M.txt
  *  include any help from people (including course staff, 
  *  classmates, and friends) and attribute them by name.
  **********************************************************************/
-
+No help received.
 
 /**********************************************************************
  *  Describe any serious problems you encountered.                    
  **********************************************************************/
-
+Difficulties implementing nearest neighbour in KdTree.
 
 /**********************************************************************
  *  If you worked with a partner, assert below that you followed
