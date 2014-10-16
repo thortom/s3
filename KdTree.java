@@ -183,7 +183,7 @@ public class KdTree {
     }
 
     // a nearest neighbor in the set to p; null if set is empty
-    public Point2D nearest(Point2D p) 
+    public Point2D nearest2(Point2D p) 
     {
     	if(root == null)
     	{
@@ -322,11 +322,69 @@ public class KdTree {
     	}
     	return best;
     }
+    
+    // a nearest neighbor in the set to p; null if set is empty
+    public Point2D nearest(Point2D p) 
+    {
+    	return recursiveNearest(root, Line.VERTICAL, p, null); 		// best point is null here
+    }
+    
+    private Point2D recursiveNearest(Node current, Line line, Point2D p, Point2D best) {
+    	Point2D rightP = null;
+    	Point2D leftP = null;
+    	
+    	if (current == null) 	 return null;
+    	if (p.equals(current.p)) return current.p;
+    	if (best == null) 		 best = current.p;
+    	else if (p.distanceSquaredTo(current.p) < p.distanceSquaredTo(best))
+    		best = current.p;
+    	
+    	if (line == Line.VERTICAL) {
+    		if(p.x() < current.p.x()) {
+    			leftP = recursiveNearest(current.left, Line.HORIZONTAL, p, best);
+    			if (leftP != null && leftP != best)
+    				if (p.distanceSquaredTo(leftP) < p.distanceTo(best))
+    					best = leftP;
+    			if (current.right != null && current.right.rect.distanceSquaredTo(p) < best.distanceSquaredTo(p))
+    				rightP = recursiveNearest(current.right, Line.HORIZONTAL, p, best);
+    		}
+    		else {
+    			rightP = recursiveNearest(current.right, Line.HORIZONTAL, p, best);
+    			if (rightP != null && rightP != best)
+    				if (p.distanceSquaredTo(rightP) < p.distanceSquaredTo(best))
+    					best = rightP;
+    			if (current.left != null && current.left.rect.distanceSquaredTo(p) < best.distanceSquaredTo(p))
+    				leftP = recursiveNearest(current.left, Line.HORIZONTAL, p, best);
+    		}
+    	}
+    	else if (line == Line.HORIZONTAL) {
+    		if(p.y() < current.p.y()) {
+    			leftP = recursiveNearest(current.left, Line.VERTICAL, p, best);
+    			if (leftP != null && leftP != best)
+    				if (p.distanceSquaredTo(leftP) < p.distanceTo(best))
+    					best = leftP;
+    			if (current.right != null && current.right.rect.distanceSquaredTo(p) < best.distanceSquaredTo(p))
+    				rightP = recursiveNearest(current.right, Line.VERTICAL, p, best);
+    		}
+    		else {
+    			rightP = recursiveNearest(current.right, Line.VERTICAL, p, best);
+    			if (rightP != null && rightP != best)
+    				if (p.distanceSquaredTo(rightP) < p.distanceSquaredTo(best))
+    					best = rightP;
+    			if (current.left != null && current.left.rect.distanceSquaredTo(p) < best.distanceSquaredTo(p))
+    				leftP = recursiveNearest(current.left, Line.VERTICAL, p, best);
+    		}
+    	}
+    	if (rightP != null) 	return rightP;
+    	else if (leftP != null) return leftP;
+    	else 					return best;
+    }
 
     /*******************************************************************************
      * Test client
      ******************************************************************************/
     public static void main(String[] args) {
+    	/*
     	int N = StdIn.readInt();
     	KdTree kdt = new KdTree();
     	
@@ -355,6 +413,29 @@ public class KdTree {
     	StdOut.println(N + "    " + timer.elapsedTime());
     	
         kdt.draw();
+        */
+    	
+    	In in = new In();
+    	Out out = new Out();    
+    	int N = in.readInt(), C = in.readInt(), T = 50;
+    	Point2D[] queries = new Point2D[C];
+    	KdTree tree = new KdTree();
+    	out.printf("Inserting %d points into tree\n", N);
+    	for (int i = 0; i < N; i++) {
+    	    tree.insert(new Point2D(in.readDouble(), in.readDouble()));
+    	}
+    	out.printf("tree.size(): %d\n", tree.size());
+    	out.printf("Testing `nearest` method, querying %d points\n", C);
+
+    	for (int i = 0; i < C; i++) {
+    	    queries[i] = new Point2D(in.readDouble(), in.readDouble());
+    	    out.printf("%s: %s\n", queries[i], tree.nearest(queries[i]));
+    	}
+    	for (int i = 0; i < T; i++) {
+    	    for (int j = 0; j < C; j++) {
+    	        tree.nearest(queries[j]);
+    	    }
+    	}
 
     }
 }
