@@ -183,7 +183,7 @@ public class KdTree {
     }
 
     // a nearest neighbor in the set to p; null if set is empty
-    public Point2D nearest(Point2D p) 
+    public Point2D nearest2(Point2D p) 
     {
     	if(root == null)
     	{
@@ -322,11 +322,69 @@ public class KdTree {
     	}
     	return best;
     }
+    
+    // a nearest neighbor in the set to p; null if set is empty
+    public Point2D nearest(Point2D p) 
+    {
+    	return recursiveNearest(root, Line.VERTICAL, p, null); 		// best point is null here
+    }
+    
+    private Point2D recursiveNearest(Node current, Line line, Point2D p, Point2D best) {
+    	Point2D second = null;
+    	Point2D first = null;
+    	
+    	if (current == null) 	 return null;
+    	if (p.equals(current.p)) return current.p;
+    	if (best == null) 		 best = current.p;
+    	else if (p.distanceSquaredTo(current.p) < p.distanceSquaredTo(best))
+    		best = current.p;
+    	
+    	if (line == Line.VERTICAL) {
+    		if(p.x() < current.p.x()) {
+    			first = recursiveNearest(current.left, Line.HORIZONTAL, p, best);
+    			if (first != null && first != best)
+    				if (p.distanceSquaredTo(first) < p.distanceTo(best))
+    					best = first;
+    			if (current.right != null && current.right.rect.distanceSquaredTo(p) < best.distanceSquaredTo(p))
+    				second = recursiveNearest(current.right, Line.HORIZONTAL, p, best);
+    		}
+    		else {
+    			first = recursiveNearest(current.right, Line.HORIZONTAL, p, best);
+    			if (first != null && first != best)
+    				if (p.distanceSquaredTo(first) < p.distanceSquaredTo(best))
+    					best = first;
+    			if (current.left != null && current.left.rect.distanceSquaredTo(p) < best.distanceSquaredTo(p))
+    				second = recursiveNearest(current.left, Line.HORIZONTAL, p, best);
+    		}
+    	}
+    	else if (line == Line.HORIZONTAL) {
+    		if(p.y() < current.p.y()) {
+    			first = recursiveNearest(current.left, Line.VERTICAL, p, best);
+    			if (first != null && first != best)
+    				if (p.distanceSquaredTo(first) < p.distanceTo(best))
+    					best = first;
+    			if (current.right != null && current.right.rect.distanceSquaredTo(p) < best.distanceSquaredTo(p))
+    				second = recursiveNearest(current.right, Line.VERTICAL, p, best);
+    		}
+    		else {
+    			first = recursiveNearest(current.right, Line.VERTICAL, p, best);
+    			if (first != null && first != best)
+    				if (p.distanceSquaredTo(first) < p.distanceSquaredTo(best))
+    					best = first;
+    			if (current.left != null && current.left.rect.distanceSquaredTo(p) < best.distanceSquaredTo(p))
+    				second = recursiveNearest(current.left, Line.VERTICAL, p, best);
+    		}
+    	}
+    	if (second != null) 	return second;
+    	else if (first != null) return first;
+    	else 					return best;
+    }
 
     /*******************************************************************************
      * Test client
      ******************************************************************************/
     public static void main(String[] args) {
+    	/*
     	int N = StdIn.readInt();
     	KdTree kdt = new KdTree();
     	
@@ -361,7 +419,30 @@ public class KdTree {
     	}
     	StdOut.println(N + "    " + timer.elapsedTime()/10);
     	
-        //kdt.draw();
+        kdt.draw();
+        */
+    	
+    	In in = new In();
+    	Out out = new Out();    
+    	int N = in.readInt(), C = in.readInt(), T = 50;
+    	Point2D[] queries = new Point2D[C];
+    	KdTree tree = new KdTree();
+    	out.printf("Inserting %d points into tree\n", N);
+    	for (int i = 0; i < N; i++) {
+    	    tree.insert(new Point2D(in.readDouble(), in.readDouble()));
+    	}
+    	out.printf("tree.size(): %d\n", tree.size());
+    	out.printf("Testing `nearest` method, querying %d points\n", C);
+
+    	for (int i = 0; i < C; i++) {
+    	    queries[i] = new Point2D(in.readDouble(), in.readDouble());
+    	    out.printf("%s: %s\n", queries[i], tree.nearest(queries[i]));
+    	}
+    	for (int i = 0; i < T; i++) {
+    	    for (int j = 0; j < C; j++) {
+    	        tree.nearest(queries[j]);
+    	    }
+    	}
 
     }
 }
