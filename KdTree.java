@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import edu.princeton.cs.algs4.Point2D;
+import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.SET;
 import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.introcs.In;
@@ -20,7 +21,7 @@ public class KdTree {
 	private Node root;             // root of BST
 	private static enum Line {VERTICAL, HORIZONTAL};
 
-    private class Node {
+    private static class Node {
         private Node left, right;  // left and right subtrees
         private RectHV rect;
         private Point2D p;
@@ -154,7 +155,7 @@ public class KdTree {
 
     // all points in the set that are inside the rectangle
     public Iterable<Point2D> range(RectHV rect) {
-    	ArrayList<Point2D> lis = new ArrayList<Point2D>();
+    	Queue<Point2D> queue = new Queue<Point2D>();
     	Stack<Node> stack = new Stack<Node>();
     	Node current = root;
     	boolean done = false;
@@ -168,7 +169,7 @@ public class KdTree {
     	    	if (!stack.isEmpty()) {
     	    		current = stack.pop();
     	    		if(rect.contains(current.p))
-    	    			lis.add(current.p);
+    	    			queue.enqueue(current.p);
 
     	    		current = current.right;
     	    	}
@@ -177,7 +178,7 @@ public class KdTree {
     	    }
     	}
     	
-        return Collections.unmodifiableList(lis);
+        return queue;
     }
 
     // a nearest neighbor in the set to p; null if set is empty
@@ -383,9 +384,7 @@ public class KdTree {
     	for(int i = 0; i < N; i++) {
     		kdt.insert(points[i]);
     	}
-    	
-
         kdt.draw();
-        
+
     }
 }
