@@ -2,20 +2,15 @@ package s3;
 /*************************************************************************
  *************************************************************************/
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+
 
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.Queue;
-import edu.princeton.cs.algs4.SET;
 import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.Stopwatch;
 import edu.princeton.cs.introcs.In;
 import edu.princeton.cs.introcs.Out;
 import edu.princeton.cs.introcs.StdDraw;
-import edu.princeton.cs.introcs.StdOut;
 import edu.princeton.cs.introcs.StdIn;
 import edu.princeton.cs.introcs.StdRandom;
 
@@ -63,6 +58,7 @@ public class KdTree {
     	root = insert(p, root, null, Line.VERTICAL); 			// null is used for no parent
     };
  
+    // recursive helper function for adding a point
     private Node insert(Point2D p, Node child, Node parent, Line line) {
     	if(child == null) {
     		if(child == parent)	return new Node(p, 0, 0, 1, 1); 				// This is the root
@@ -95,20 +91,18 @@ public class KdTree {
         return contains(root, Line.VERTICAL, p);
     }
     
+    // recursive helper function for checking if point p is in the set
     private boolean contains(Node x, Line line, Point2D p) {
     	
-    	if(x == null) return false;
+    	if(x == null) 			return false;
+    	if (p.equals(x.p)) 		return true;
     	if(line == Line.VERTICAL) {
     		if		(p.x() < x.p.x()) 		return contains(x.left, Line.HORIZONTAL, p);
-    		else if	(p.x() > x.p.x()) 		return contains(x.right, Line.HORIZONTAL, p);
-    		else if (p.equals(x.p)) 		return true;
-    		else 							return contains(x.right, Line.HORIZONTAL, p);
+    		else if	(p.x() >= x.p.x()) 		return contains(x.right, Line.HORIZONTAL, p);
     	}
     	else if(line == Line.HORIZONTAL) {
     		if		(p.y() < x.p.y()) 		return contains(x.left, Line.VERTICAL, p);
-    		else if	(p.y() > x.p.y()) 		return contains(x.right, Line.VERTICAL, p);
-    		else if (p.equals(x.p)) 		return true;
-    		else 							return contains(x.right, Line.VERTICAL, p);
+    		else if	(p.y() >= x.p.y()) 		return contains(x.right, Line.VERTICAL, p);
     	}
     	return false;
     }
@@ -124,6 +118,7 @@ public class KdTree {
 		drawPoints(root, Line.VERTICAL);
     }
     
+    // recursive helper function for drawing all the points
     private void drawPoints(Node child, Line line) {
     	if(child == null) return;
     	if(line == Line.VERTICAL) {
@@ -335,16 +330,20 @@ public class KdTree {
     	return recursiveNearest(root, Line.VERTICAL, p, null); 		// best point is null here
     }
     
+    // recursive helper function for neighbor search 
     private Point2D recursiveNearest(Node current, Line line, Point2D p, Point2D best) {
     	Point2D second = null;
     	Point2D first = null;
     	
     	if (current == null) 	 return null;
-    	if (p.equals(current.p)) return current.p;
-    	if (best == null) 		 best = current.p;
+    	if (p.equals(current.p)) return current.p;		// stop if point p is found
+    	if (best == null) 		 best = current.p; 		// first call to the function, set root.p as -> best
     	else if (p.distanceSquaredTo(current.p) < p.distanceSquaredTo(best))
     		best = current.p;
     	
+    	// four cases that are nearly the same...
+    	// 		Vertical splitting line vs. Horizontal
+    	// 		point of interest to the right/left or up/down
     	if (line == Line.VERTICAL) {
     		if(p.x() < current.p.x()) {
     			first = recursiveNearest(current.left, Line.HORIZONTAL, p, best);
@@ -390,43 +389,34 @@ public class KdTree {
      * Test client
      ******************************************************************************/
     public static void main(String[] args) {
-    	/*
+    	
     	int N = StdIn.readInt();
     	KdTree kdt = new KdTree();
     	
     	Point2D[] points = new Point2D[N];
-    	//if(!StdIn.isEmpty()) {
+    	if(!StdIn.isEmpty()) {
     		for(int i = 0; i < N; i++) {
-//	    		double x = StdIn.readDouble();
-//	    		double y = StdIn.readDouble();
-    			double x = StdRandom.uniform(0, N)/N;
-	    		double y = StdRandom.uniform(0, N)/N;
+	    		double x = StdIn.readDouble();
+	    		double y = StdIn.readDouble();
 	    		points[i] = new Point2D(x, y);
 	    	}
-    //	}
-//    	else {
-//	    	for(int i = 0; i < N; i++) {
-//	    		double x = StdRandom.uniform(0, 1000)/1000.0;
-//	    		double y = StdRandom.uniform(0, 1000)/1000.0;
-//	    		double x = StdRandom.uniform(0, N);
-//	    		double y = StdRandom.uniform(0, N);
-//	    		points[i] = new Point2D(x, y);
+    	}
+    	else {
+	    	for(int i = 0; i < N; i++) {
+	    		double x = StdRandom.uniform(0, N)/(N+.0);
+	    		double y = StdRandom.uniform(0, N)/(N+.0);
+	    		points[i] = new Point2D(x, y);
 	    		
 	    		//StdOut.println("x = " + x + " y = " + y);
-//	    	}
-    	//}
+	    	}
+    	}
     	
-    	Stopwatch timer = new Stopwatch();
-    	for(int j = 0; j < 10; j++)
-    	{
     	for(int i = 0; i < N; i++) {
     		kdt.insert(points[i]);
     	}
-    	}
-    	StdOut.println(N + "    " + timer.elapsedTime()/10);
     	
         kdt.draw();
-        */
+
     	
 //    	In in = new In();
 //    	Out out = new Out();    
@@ -450,32 +440,33 @@ public class KdTree {
 //    	    }
 //    	}
     	
-    	KdTree kdtree = new KdTree();
-    	
-    	for(int i = 0; i < 1000000; i++)
-    	{
-    		double x = StdRandom.uniform(0.0, 1.0)/1.0;
-    		double y = StdRandom.uniform(0.0, 1.0)/1.0;
-    		Point2D p = new Point2D(x, y);
-            kdtree.insert(p);
-    	}
-    	double time;
-    	double t2 = 0;
-    	for(int i = 0; i < 10; i++)
-    	{
-    		double x = StdRandom.uniform(0.0, 1.0)/1.0;
-    		double y = StdRandom.uniform(0.0, 1.0)/1.0;
-    		Point2D query = new Point2D(x, y);
-    		
-    		Stopwatch timer = new Stopwatch();
-    		kdtree.nearest(query);
-    		time = timer.elapsedTime();
-    		BigDecimal decimal = new BigDecimal(time);
-    		t2 += decimal.doubleValue();
-    		StdOut.println(10 + "    " + timer.elapsedTime());
-    	}
-    	
-    	StdOut.println("Timi er : " + t2/10);
+//    	KdTree kdtree = new KdTree();
+//    	
+//    	for(int i = 0; i < 1000000; i++)
+//    	{
+//    		double x = StdRandom.uniform(0.0, 1.0)/1.0;
+//    		double y = StdRandom.uniform(0.0, 1.0)/1.0;
+//    		Point2D p = new Point2D(x, y);
+//            kdtree.insert(p);
+//    	}
+//    	double time;
+//    	double t2 = 0;
+//    	for(int i = 0; i < 10; i++)
+//    	{
+//    		double x = StdRandom.uniform(0.0, 1.0)/1.0;
+//    		double y = StdRandom.uniform(0.0, 1.0)/1.0;
+//    		Point2D query = new Point2D(x, y);
+//    		
+//    		Stopwatch timer = new Stopwatch();
+//    		kdtree.nearest(query);
+//    		time = timer.elapsedTime();
+//    		BigDecimal decimal = new BigDecimal(time);
+//    		t2 += decimal.doubleValue();
+//    		StdOut.println(10 + "    " + timer.elapsedTime());
+//    	}
+//    	
+//    	StdOut.println("Timi er : " + t2/10);
+
 
     }
 }
