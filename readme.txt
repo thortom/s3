@@ -107,10 +107,20 @@ bytes per KdTree of N points (using tilde notation):   ~ 	112xN bytes
 
                      calls to nearest() per second
                      brute force           2d-tree
-input100K.txt
-input1M.txt
+input100K.txt		1*10^7					8300(5*10^7)
+input1M.txt			1.1*10^7				10000(5*10^8)
 
+We started to find the average time to find nearest neighbour. Than we 
+divided operations performed with the time, then we have operations per
+second. 
 
+In brute-force we similar results for N operations.
+In 2d-tree when we used log(N) for the typical case from the lecture 
+slides, we very low results. But when we used worst case, N, we got 
+results more similar the brute-force results, but higher.
+
+We believe from that results that have don't have the typical case but 
+more like the worst case. 
 
 /**********************************************************************
  *  Known bugs / limitations.
