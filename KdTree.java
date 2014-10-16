@@ -181,7 +181,11 @@ public class KdTree {
     	
         return queue;
     }
-
+    /* ########### We do not use #########################
+     * Failed attempt at making a nearest neighbor search.
+     * Cost us many hours of work
+     * ###################################################
+     * 
     // a nearest neighbor in the set to p; null if set is empty
     public Point2D nearest2(Point2D p) 
     {
@@ -322,6 +326,7 @@ public class KdTree {
     	}
     	return best;
     }
+    ################################################ */
     
     // a nearest neighbor in the set to p; null if set is empty
     public Point2D nearest(Point2D p) 
