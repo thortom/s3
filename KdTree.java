@@ -10,6 +10,7 @@ import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.SET;
 import edu.princeton.cs.algs4.Stack;
+import edu.princeton.cs.algs4.Stopwatch;
 import edu.princeton.cs.introcs.In;
 import edu.princeton.cs.introcs.Out;
 import edu.princeton.cs.introcs.StdDraw;
@@ -336,13 +337,16 @@ public class KdTree {
 	    		double y = StdRandom.uniform(0, 1000)/1000.0;
 	    		points[i] = new Point2D(x, y);
 	    		
-	    		StdOut.println("x = " + x + " y = " + y);
+	    		//StdOut.println("x = " + x + " y = " + y);
 	    	}
     	}
     	
+    	Stopwatch timer = new Stopwatch();
     	for(int i = 0; i < N; i++) {
     		kdt.insert(points[i]);
     	}
+    	StdOut.println(N + "    " + timer.elapsedTime());
+    	
         kdt.draw();
 
     }

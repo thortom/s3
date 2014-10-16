@@ -3,11 +3,11 @@
  *  Kd-tree
 **********************************************************************/
 
-Name:	Halldór Stefánsson
+Name:	HalldÃ³r StefÃ¡nsson
 Login:	halldors12
 Section instructor:
 
-Partner name:	Þór Tómasarson
+Partner name:	ÃžÃ³r TÃ³masarson
 Partner login:	thortom12
 Partner section instructor:
 
@@ -15,10 +15,21 @@ Partner section instructor:
  *  Describe the Node data type you used to implement the
  *  2d-tree data structure.
  **********************************************************************/
+The implemented Node contains left and right child Nodes, a rectangle (RectHV)
+and a point (Point2D). It might be convenient to include an indication of
+the linetype of the Node (Horizontal vs. Vertical), but not necessary.
 
 /**********************************************************************
  *  Describe your method for range search in a kd-tree.
  **********************************************************************/
+The range search method in our kd-tree uses non-recursive function range(RecthHV)
+which returns Queue<Point2D> in the form of a Iterable<Point2D>. We walk down the
+tree, if the Node's rectangle intersects the rectangle of interest, one left Node
+at a time and stor each Node in a Stack<Node> until we reach the null (end). At
+the end we pop the last Node from the stack, examine it (check if in the rectangle)
+and put in the Queue<Point2D> if it is in the rectangle of interest. Then we
+move one Node to the right and repeat the walk down left Nodes.
+When the stack is empty then we are done, and return the Queue<Point2D> of points.
 
 
 /**********************************************************************
@@ -36,11 +47,22 @@ Partner section instructor:
  *  including memory for the nodes, points, and rectangles.
  **********************************************************************/
 
-bytes per Point2D: 32 bytes
+bytes per Point2D: 	32 bytes
 
-bytes per RectHV:
+bytes per RectHV:	48 bytes =
+					(16 bytes overhead) + 4x(8 bytes for coordinates)
 
-bytes per KdTree of N points (using tilde notation):   ~
+bytes per KdTree of N points (using tilde notation):   ~ 	112xN bytes 
+					// N for number of nodes in KdTree
+					/*
+					Node: (16 overhead) + (2x8 bytes Node reference)
+							+ (48 bytes RectHV) + (32 bytes Point2D)
+					KdTree: (8 + N(16 + 2x8 + 48 + 32) bytes Nodes)
+							+ (16 overhead)
+							+ (16 overhead + 2x(4 bytes for int) bytes for Lines) 
+							~ 112xN bytes
+					*/
+
 [include the memory for any referenced Node, Point2D and RectHV objects]
 
 
@@ -79,7 +101,7 @@ input1M.txt
 
 /**********************************************************************
  *  Describe whatever help (if any) that you received.
- *  Don't include readings, lectures, and dæmatímar, but do
+ *  Don't include readings, lectures, and dÃ¦matÃ­mar, but do
  *  include any help from people (including course staff, 
  *  classmates, and friends) and attribute them by name.
  **********************************************************************/
