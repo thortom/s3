@@ -3,11 +3,11 @@
  *  Kd-tree
 **********************************************************************/
 
-Name:	Halldór Stefánsson
+Name:	Halldor Stefansson
 Login:	halldors12
 Section instructor:
 
-Partner name:	Þór Tómasarson
+Partner name:	Thor Tomasarson
 Partner login:	thortom12
 Partner section instructor:
 
@@ -101,7 +101,7 @@ input1M.txt
 
 /**********************************************************************
  *  Describe whatever help (if any) that you received.
- *  Don't include readings, lectures, and dæmatímar, but do
+ *  Don't include readings, lectures, and daematimar, but do
  *  include any help from people (including course staff, 
  *  classmates, and friends) and attribute them by name.
  **********************************************************************/
@@ -117,10 +117,9 @@ input1M.txt
  *  the protocol as described on the assignment page. Give one
  *  sentence explaining what each of you contributed.
  **********************************************************************/
-
-
-
-
+Halldor worked mostly on PointSET and the nearest function in KdTree.
+Thor worked mostly on KdTree.
+Both contributed to readme.
 
 
 /**********************************************************************
