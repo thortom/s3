@@ -330,8 +330,8 @@ public class KdTree {
     }
     
     private Point2D recursiveNearest(Node current, Line line, Point2D p, Point2D best) {
-    	Point2D rightP = null;
-    	Point2D leftP = null;
+    	Point2D second = null;
+    	Point2D first = null;
     	
     	if (current == null) 	 return null;
     	if (p.equals(current.p)) return current.p;
@@ -341,42 +341,42 @@ public class KdTree {
     	
     	if (line == Line.VERTICAL) {
     		if(p.x() < current.p.x()) {
-    			leftP = recursiveNearest(current.left, Line.HORIZONTAL, p, best);
-    			if (leftP != null && leftP != best)
-    				if (p.distanceSquaredTo(leftP) < p.distanceTo(best))
-    					best = leftP;
+    			first = recursiveNearest(current.left, Line.HORIZONTAL, p, best);
+    			if (first != null && first != best)
+    				if (p.distanceSquaredTo(first) < p.distanceTo(best))
+    					best = first;
     			if (current.right != null && current.right.rect.distanceSquaredTo(p) < best.distanceSquaredTo(p))
-    				rightP = recursiveNearest(current.right, Line.HORIZONTAL, p, best);
+    				second = recursiveNearest(current.right, Line.HORIZONTAL, p, best);
     		}
     		else {
-    			rightP = recursiveNearest(current.right, Line.HORIZONTAL, p, best);
-    			if (rightP != null && rightP != best)
-    				if (p.distanceSquaredTo(rightP) < p.distanceSquaredTo(best))
-    					best = rightP;
+    			first = recursiveNearest(current.right, Line.HORIZONTAL, p, best);
+    			if (first != null && first != best)
+    				if (p.distanceSquaredTo(first) < p.distanceSquaredTo(best))
+    					best = first;
     			if (current.left != null && current.left.rect.distanceSquaredTo(p) < best.distanceSquaredTo(p))
-    				leftP = recursiveNearest(current.left, Line.HORIZONTAL, p, best);
+    				second = recursiveNearest(current.left, Line.HORIZONTAL, p, best);
     		}
     	}
     	else if (line == Line.HORIZONTAL) {
     		if(p.y() < current.p.y()) {
-    			leftP = recursiveNearest(current.left, Line.VERTICAL, p, best);
-    			if (leftP != null && leftP != best)
-    				if (p.distanceSquaredTo(leftP) < p.distanceTo(best))
-    					best = leftP;
+    			first = recursiveNearest(current.left, Line.VERTICAL, p, best);
+    			if (first != null && first != best)
+    				if (p.distanceSquaredTo(first) < p.distanceTo(best))
+    					best = first;
     			if (current.right != null && current.right.rect.distanceSquaredTo(p) < best.distanceSquaredTo(p))
-    				rightP = recursiveNearest(current.right, Line.VERTICAL, p, best);
+    				second = recursiveNearest(current.right, Line.VERTICAL, p, best);
     		}
     		else {
-    			rightP = recursiveNearest(current.right, Line.VERTICAL, p, best);
-    			if (rightP != null && rightP != best)
-    				if (p.distanceSquaredTo(rightP) < p.distanceSquaredTo(best))
-    					best = rightP;
+    			first = recursiveNearest(current.right, Line.VERTICAL, p, best);
+    			if (first != null && first != best)
+    				if (p.distanceSquaredTo(first) < p.distanceSquaredTo(best))
+    					best = first;
     			if (current.left != null && current.left.rect.distanceSquaredTo(p) < best.distanceSquaredTo(p))
-    				leftP = recursiveNearest(current.left, Line.VERTICAL, p, best);
+    				second = recursiveNearest(current.left, Line.VERTICAL, p, best);
     		}
     	}
-    	if (rightP != null) 	return rightP;
-    	else if (leftP != null) return leftP;
+    	if (second != null) 	return second;
+    	else if (first != null) return first;
     	else 					return best;
     }
 
