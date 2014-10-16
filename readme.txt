@@ -25,27 +25,25 @@ the linetype of the Node (Horizontal vs. Vertical), but not necessary.
 The range search method in our kd-tree uses non-recursive function range(RecthHV)
 which returns Queue<Point2D> in the form of a Iterable<Point2D>. We walk down the
 tree, if the Node's rectangle intersects the rectangle of interest, one left Node
-at a time and stor each Node in a Stack<Node> until we reach the null (end). At
+at a time and stores each Node in a Stack<Node> until we reach the null (end). At
 the end we pop the last Node from the stack, examine it (check if in the rectangle)
 and put in the Queue<Point2D> if it is in the rectangle of interest. Then we
 move one Node to the right and repeat the walk down left Nodes.
 When the stack is empty then we are done, and return the Queue<Point2D> of points.
 
-
 /**********************************************************************
  *  Describe your method for nearest neighbour search in a kd-tree.
  **********************************************************************/
-The nearest neighbor search method in our kd-tree uses recursive calls to
-recursiveNearest(..) the first call puts the nearest neighbor as the root.
+The nearest neighbour search method in our kd-tree uses recursive calls to
+recursiveNearest(..) the first call puts the nearest neighbour as the root.
 The recursive function checks if the current Node point is closer to
 the point of interest than the current-best. If so then update the 
-current-best. Then the function checks first for the nearest neighbor on
+current-best. Then the function checks first for the nearest neighbour on
 the points side, point of interest, side of the splitting horizontal/vertical line.
 When it comes back from the search on the point side, the function checks
 if the other sides rectangle is close enough to the point of interest. To be
-able to contain a closer neighbor, then we check there also. This is
+able to contain a closer neighbour, then we check there also. This is
 done recursively.
-
 
 /**********************************************************************
  *  Give the total memory usage in bytes (using tilde notation and 
@@ -118,15 +116,25 @@ bytes per KdTree of N points (using tilde notation):   ~ 	112xN bytes
 
                      calls to nearest() per second
                      brute force           2d-tree
-input100K.txt
-input1M.txt
+input100K.txt		1*10^7					8300(5*10^7)
+input1M.txt			1.1*10^7				10000(5*10^8)
 
+We started to find the average time to find nearest neighbour. Than we 
+divided operations performed with the time, then we have operations per
+second. 
 
+In brute-force we similar results for N operations.
+In 2d-tree when we used log(N) for the typical case from the lecture 
+slides, we very low results. But when we used worst case, N, we got 
+results more similar the brute-force results, but higher.
+
+We believe from that results that have don't have the typical case but 
+more like the worst case. 
 
 /**********************************************************************
  *  Known bugs / limitations.
  **********************************************************************/
-
+None that we can think of.
 
 /**********************************************************************
  *  Describe whatever help (if any) that you received.
@@ -161,4 +169,4 @@ Both contributed to readme.
  *  on how much you learned from doing the assignment, and whether    
  *  you enjoyed doing it.                                             
  **********************************************************************/
- We learned a lot on how to debug well with eclipse, and enjoyed assignment also.
+ We learned a lot on how to debug well with eclipse, and enjoyed the assignment also.

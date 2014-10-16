@@ -11,13 +11,14 @@ package s3;
  *
  *************************************************************************/
 
-import java.util.Arrays;
+
 
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.Queue;
-import edu.princeton.cs.introcs.In;
-import edu.princeton.cs.introcs.Out;
+import edu.princeton.cs.algs4.Stopwatch;
 import edu.princeton.cs.introcs.StdDraw;
+import edu.princeton.cs.introcs.StdOut;
+import edu.princeton.cs.introcs.StdRandom;
 import edu.princeton.cs.algs4.SET;
 
 public class PointSET {
@@ -111,58 +112,92 @@ public class PointSET {
     }
 
     public static void main(String[] args) {
-        In in = new In();
-        Out out = new Out();
-        int nrOfRecangles = in.readInt();
-        int nrOfPointsCont = in.readInt();
-        int nrOfPointsNear = in.readInt();
-        RectHV[] rectangles = new RectHV[nrOfRecangles];
-        Point2D[] pointsCont = new Point2D[nrOfPointsCont];
-        Point2D[] pointsNear = new Point2D[nrOfPointsNear];
-        for (int i = 0; i < nrOfRecangles; i++) {
-            rectangles[i] = new RectHV(in.readDouble(), in.readDouble(),
-                    in.readDouble(), in.readDouble());
-        }
-        for (int i = 0; i < nrOfPointsCont; i++) {
-            pointsCont[i] = new Point2D(in.readDouble(), in.readDouble());
-        }
-        for (int i = 0; i < nrOfPointsNear; i++) {
-            pointsNear[i] = new Point2D(in.readDouble(), in.readDouble());
-        }
-        PointSET set = new PointSET();
-        for (int i = 0; !in.isEmpty(); i++) {
-            double x = in.readDouble(), y = in.readDouble();
-            set.insert(new Point2D(x, y));
-        }
-        for (int i = 0; i < nrOfRecangles; i++) {
-            // Query on rectangle i, sort the result, and print
-            Iterable<Point2D> ptset = set.range(rectangles[i]);
-            int ptcount = 0;
-            for (Point2D p : ptset)
-                ptcount++;
-            Point2D[] ptarr = new Point2D[ptcount];
-            int j = 0;
-            for (Point2D p : ptset) {
-                ptarr[j] = p;
-                j++;
-            }
-            Arrays.sort(ptarr);
-            out.println("Inside rectangle " + (i + 1) + ":");
-            for (j = 0; j < ptcount; j++)
-                out.println(ptarr[j]);
-        }
-        out.println("Contain test:");
-        for (int i = 0; i < nrOfPointsCont; i++) {
-            out.println((i + 1) + ": " + set.contains(pointsCont[i]));
-        }
-
-        out.println("Nearest test:");
-        for (int i = 0; i < nrOfPointsNear; i++) {
-            out.println((i + 1) + ": " + set.nearest(pointsNear[i]));
-        }
-
-        out.println();
-        set.draw();
+//        In in = new In();
+//        Out out = new Out();
+//        int nrOfRecangles = in.readInt();
+//        int nrOfPointsCont = in.readInt();
+//        int nrOfPointsNear = in.readInt();
+//        RectHV[] rectangles = new RectHV[nrOfRecangles];
+//        Point2D[] pointsCont = new Point2D[nrOfPointsCont];
+//        Point2D[] pointsNear = new Point2D[nrOfPointsNear];
+//        for (int i = 0; i < nrOfRecangles; i++) {
+//            rectangles[i] = new RectHV(in.readDouble(), in.readDouble(),
+//                    in.readDouble(), in.readDouble());
+//        }
+//        for (int i = 0; i < nrOfPointsCont; i++) {
+//            pointsCont[i] = new Point2D(in.readDouble(), in.readDouble());
+//        }
+//        for (int i = 0; i < nrOfPointsNear; i++) {
+//            pointsNear[i] = new Point2D(in.readDouble(), in.readDouble());
+//        }
+//        PointSET set = new PointSET();
+//        for (int i = 0; !in.isEmpty(); i++) {
+//            double x = in.readDouble(), y = in.readDouble();
+//            set.insert(new Point2D(x, y));
+//        }
+//        for (int i = 0; i < nrOfRecangles; i++) {
+//            // Query on rectangle i, sort the result, and print
+//            Iterable<Point2D> ptset = set.range(rectangles[i]);
+//            int ptcount = 0;
+//            for (Point2D p : ptset)
+//                ptcount++;
+//            Point2D[] ptarr = new Point2D[ptcount];
+//            int j = 0;
+//            for (Point2D p : ptset) {
+//                ptarr[j] = p;
+//                j++;
+//            }
+//            Arrays.sort(ptarr);
+//            out.println("Inside rectangle " + (i + 1) + ":");
+//            for (j = 0; j < ptcount; j++)
+//                out.println(ptarr[j]);
+//        }
+//        out.println("Contain test:");
+//        for (int i = 0; i < nrOfPointsCont; i++) {
+//            out.println((i + 1) + ": " + set.contains(pointsCont[i]));
+//        }
+//
+//        out.println("Nearest test:");
+//        for (int i = 0; i < nrOfPointsNear; i++) {
+//            out.println((i + 1) + ": " + set.nearest(pointsNear[i]));
+//        }
+//
+//        out.println();
+//        set.draw();
+//    	String filename = "input100K.txt";
+//    	In in = new In(filename);
+    	    	
+    	PointSET brute = new PointSET();
+    	
+//    	while (!in.isEmpty())
+//    	{
+//    		double x = in.readDouble();
+//            double y = in.readDouble();
+//            Point2D p = new Point2D(x, y);
+//            brute.insert(p);
+//    	}
+    	for(int i = 0; i < 1000000; i++)
+    	{
+    		double x = StdRandom.uniform(0.0, 1.0)/1.0;
+    		double y = StdRandom.uniform(0.0, 1.0)/1.0;
+    		Point2D p = new Point2D(x, y);
+            brute.insert(p);
+    	}
+    	
+    	double time = 0;
+    	for(int i = 0; i < 1000; i++)
+    	{
+    		double x = StdRandom.uniform(0.0, 1.0)/1.0;
+    		double y = StdRandom.uniform(0.0, 1.0)/1.0;
+    		Point2D query = new Point2D(x, y);
+    		
+    		Stopwatch timer = new Stopwatch();
+    		brute.nearest(query);
+    		time += timer.elapsedTime();
+    		StdOut.println(1000 + "    " + timer.elapsedTime());
+    	}
+    	StdOut.println("Timi er :" + time/1000);
+    	
     }
 
 }

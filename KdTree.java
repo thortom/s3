@@ -2,6 +2,8 @@ package s3;
 /*************************************************************************
  *************************************************************************/
 
+
+
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.Stack;
@@ -414,6 +416,56 @@ public class KdTree {
     	}
     	
         kdt.draw();
+
+    	
+//    	In in = new In();
+//    	Out out = new Out();    
+//    	int N = in.readInt(), C = in.readInt(), T = 50;
+//    	Point2D[] queries = new Point2D[C];
+//    	KdTree tree = new KdTree();
+//    	out.printf("Inserting %d points into tree\n", N);
+//    	for (int i = 0; i < N; i++) {
+//    	    tree.insert(new Point2D(in.readDouble(), in.readDouble()));
+//    	}
+//    	out.printf("tree.size(): %d\n", tree.size());
+//    	out.printf("Testing `nearest` method, querying %d points\n", C);
+//
+//    	for (int i = 0; i < C; i++) {
+//    	    queries[i] = new Point2D(in.readDouble(), in.readDouble());
+//    	    out.printf("%s: %s\n", queries[i], tree.nearest(queries[i]));
+//    	}
+//    	for (int i = 0; i < T; i++) {
+//    	    for (int j = 0; j < C; j++) {
+//    	        tree.nearest(queries[j]);
+//    	    }
+//    	}
+    	
+//    	KdTree kdtree = new KdTree();
+//    	
+//    	for(int i = 0; i < 1000000; i++)
+//    	{
+//    		double x = StdRandom.uniform(0.0, 1.0)/1.0;
+//    		double y = StdRandom.uniform(0.0, 1.0)/1.0;
+//    		Point2D p = new Point2D(x, y);
+//            kdtree.insert(p);
+//    	}
+//    	double time;
+//    	double t2 = 0;
+//    	for(int i = 0; i < 10; i++)
+//    	{
+//    		double x = StdRandom.uniform(0.0, 1.0)/1.0;
+//    		double y = StdRandom.uniform(0.0, 1.0)/1.0;
+//    		Point2D query = new Point2D(x, y);
+//    		
+//    		Stopwatch timer = new Stopwatch();
+//    		kdtree.nearest(query);
+//    		time = timer.elapsedTime();
+//    		BigDecimal decimal = new BigDecimal(time);
+//    		t2 += decimal.doubleValue();
+//    		StdOut.println(10 + "    " + timer.elapsedTime());
+//    	}
+//    	
+//    	StdOut.println("Timi er : " + t2/10);
 
 
     }
