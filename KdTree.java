@@ -389,28 +389,35 @@ public class KdTree {
     	KdTree kdt = new KdTree();
     	
     	Point2D[] points = new Point2D[N];
-    	if(!StdIn.isEmpty()) {
+    	//if(!StdIn.isEmpty()) {
     		for(int i = 0; i < N; i++) {
-	    		double x = StdIn.readDouble();
-	    		double y = StdIn.readDouble();
+//	    		double x = StdIn.readDouble();
+//	    		double y = StdIn.readDouble();
+    			double x = StdRandom.uniform(0, N)/N;
+	    		double y = StdRandom.uniform(0, N)/N;
 	    		points[i] = new Point2D(x, y);
 	    	}
-    	}
-    	else {
-	    	for(int i = 0; i < N; i++) {
-	    		double x = StdRandom.uniform(0, 1000)/1000.0;
-	    		double y = StdRandom.uniform(0, 1000)/1000.0;
-	    		points[i] = new Point2D(x, y);
+    //	}
+//    	else {
+//	    	for(int i = 0; i < N; i++) {
+//	    		double x = StdRandom.uniform(0, 1000)/1000.0;
+//	    		double y = StdRandom.uniform(0, 1000)/1000.0;
+//	    		double x = StdRandom.uniform(0, N);
+//	    		double y = StdRandom.uniform(0, N);
+//	    		points[i] = new Point2D(x, y);
 	    		
 	    		//StdOut.println("x = " + x + " y = " + y);
-	    	}
-    	}
+//	    	}
+    	//}
     	
     	Stopwatch timer = new Stopwatch();
+    	for(int j = 0; j < 10; j++)
+    	{
     	for(int i = 0; i < N; i++) {
     		kdt.insert(points[i]);
     	}
-    	StdOut.println(N + "    " + timer.elapsedTime());
+    	}
+    	StdOut.println(N + "    " + timer.elapsedTime()/10);
     	
         kdt.draw();
         */
